@@ -4,12 +4,21 @@ import Order from "./Order";
 import Inventory from "./Inventory";
 import sampleFishes from "../sample-fishes";
 import Fish from "./Fish";
-
+import base from '../base';
 class App extends React.Component {
   state = {
     fishes: {},
     order: {}
   };
+
+  componentDidMount () {
+    const {params} = this.props.match;
+    this.ref = base.syncState(`${params.storeId}/fishes`, {
+      context: this,
+      state: 'fishes'
+    });
+
+  }
   addFish = fish => {
     const fishes = { ...this.state.fishes };
     fishes[`fish${Date.now()}`] = fish;
@@ -29,7 +38,6 @@ class App extends React.Component {
       <div className="catch-of-the-day">
         <div className="menu">
           <Header tagline="Fresh Seafood Market" />
-          <h1>Hej</h1>
           <ul className="fishes">
             {Object.keys(this.state.fishes).map(key => (
               <Fish
